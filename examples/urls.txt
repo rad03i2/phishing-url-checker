@@ -1,0 +1,5 @@
+# Safe demonstration inputs reserved for documentation/testing
+https://example.com/docs
+http://user@192.0.2.1/login/verify
+https://xn--e1afmkfd.xn--p1ai/
+https://example.com/account/verify?next=https://example.net
