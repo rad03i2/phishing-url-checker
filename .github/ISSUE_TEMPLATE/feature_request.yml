@@ -1,0 +1,37 @@
+name: Rule or feature request
+description: Propose an explainable, privacy-preserving improvement
+title: "[Feature] "
+labels:
+  - enhancement
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - New heuristic rule
+        - Rule tuning
+        - CLI
+        - JSON / API
+        - Batch workflow
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: false_positive
+    attributes:
+      label: False-positive / privacy tradeoff
+      description: Explain legitimate cases and whether the proposal requires network access.

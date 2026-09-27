@@ -1,12 +1,43 @@
-# Contributing
+# Contributing to Phishing URL Checker
 
-Contributions are welcome when they keep the checker explainable, privacy-preserving, and safe by default.
+Contributions are welcome when they keep the checker explainable, privacy-preserving and deterministic.
 
-1. Fork the repository and create a focused branch.
-2. Use Python 3.10+ and install with `python -m pip install -e . pytest`.
-3. Add or update tests for behavioral changes.
-4. Run `python -m compileall -q src tests` and `python -m pytest -q`.
-5. Keep new detection rules deterministic and document false-positive tradeoffs.
-6. Open a pull request describing the problem, approach, and validation performed.
+## Development setup
 
-Do not add automatic navigation to submitted URLs, telemetry, secret material, or remote reputation services without an explicit privacy-preserving design discussion.
+```bash
+git clone https://github.com/rad03i2/phishing-url-checker.git
+cd phishing-url-checker
+python -m pip install -e . pytest
+```
+
+## Quality checks
+
+```bash
+python -m compileall -q src tests
+python -m pytest -q
+phishcheck https://example.com
+```
+
+## Adding or changing a rule
+
+A rule change should:
+
+1. identify a structural signal available from the URL text;
+2. use a stable, descriptive finding code;
+3. expose an explicit point contribution;
+4. explain why the signal matters without declaring malicious intent;
+5. consider legitimate uses and false positives;
+6. include focused tests;
+7. preserve the no-network analysis boundary unless a separately reviewed opt-in design explicitly changes scope.
+
+## Privacy
+
+Never commit or paste private URLs containing credentials, reset tokens, session identifiers, customer data or private infrastructure details. Use documentation-safe domains and reserved example IP ranges.
+
+## Pull requests
+
+Describe the rule or behavior changed, the false-positive tradeoff, tests performed and whether public JSON/CLI behavior changed.
+
+---
+
+**Radwan Abd alhady Ahmed — رضوان عبدالهادي — [@rad03i2](https://github.com/rad03i2)**

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<title id="title">Phishing URL Checker logo</title>
+<desc id="desc">A forensic lens inspecting a URL line with warning and evidence signals.</desc>
+<rect width="512" height="512" rx="112" fill="#0B0F14"/>
+<rect x="66" y="66" width="380" height="380" rx="86" fill="#101821" stroke="#263442" stroke-width="4"/>
+<circle cx="226" cy="219" r="105" fill="#EAF0F4"/>
+<circle cx="226" cy="219" r="76" fill="#0B0F14"/>
+<path d="M301 294l92 92" stroke="#FFB547" stroke-width="34" stroke-linecap="round"/>
+<path d="M169 218h114" stroke="#4DD5FF" stroke-width="18" stroke-linecap="round"/>
+<circle cx="189" cy="218" r="13" fill="#87F5B5"/>
+<rect x="215" y="202" width="51" height="32" rx="10" fill="#FF5D5D"/>
+<path d="M240 209v11M240 226v1" stroke="#EAF0F4" stroke-width="6" stroke-linecap="round"/>
+</svg>

@@ -5,13 +5,19 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "phishing-url-checker"
 version = "1.0.0"
-description = "Offline, explainable URL risk checker for spotting common phishing indicators."
+description = "Offline, explainable URL risk checker for spotting structural phishing indicators without visiting the destination."
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [{name = "Radwan Abdulhadi Ahmed"}]
-keywords = ["phishing", "url", "security", "cli", "offline"]
+keywords = ["phishing", "url", "security", "cli", "offline", "heuristics", "url-analysis", "privacy"]
 classifiers = ["Programming Language :: Python :: 3", "License :: OSI Approved :: MIT License"]
+
+[project.urls]
+Homepage = "https://github.com/rad03i2/phishing-url-checker"
+Repository = "https://github.com/rad03i2/phishing-url-checker"
+Issues = "https://github.com/rad03i2/phishing-url-checker/issues"
+Changelog = "https://github.com/rad03i2/phishing-url-checker/blob/main/CHANGELOG.md"
 
 [project.scripts]
 phishcheck = "phishing_url_checker.cli:main"

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="800" viewBox="0 0 1600 800" role="img" aria-labelledby="title desc">
+<title id="title">Phishing URL Checker — Threat Lens</title>
+<desc id="desc">Offline URL forensics identity showing a suspicious URL decomposed into explainable structural signals.</desc>
+<defs>
+  <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#1A2530" stroke-width="1"/></pattern>
+  <filter id="soft"><feGaussianBlur stdDeviation="12"/></filter>
+</defs>
+<rect width="1600" height="800" rx="36" fill="#0B0F14"/>
+<rect width="1600" height="800" rx="36" fill="url(#grid)" opacity=".7"/>
+<circle cx="1420" cy="95" r="240" fill="#102130"/>
+<circle cx="1480" cy="30" r="110" fill="#4DD5FF" opacity=".07" filter="url(#soft)"/>
+
+<g transform="translate(86 76)">
+  <rect width="116" height="116" rx="28" fill="#EAF0F4"/>
+  <circle cx="51" cy="51" r="28" fill="none" stroke="#0B0F14" stroke-width="10"/>
+  <path d="M72 72l25 25" stroke="#FFB547" stroke-width="12" stroke-linecap="round"/>
+  <path d="M35 51h32" stroke="#FF5D5D" stroke-width="8" stroke-linecap="round"/>
+</g>
+
+<text x="88" y="285" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" letter-spacing="8" fill="#4DD5FF">OFFLINE · EXPLAINABLE · STRUCTURAL URL ANALYSIS</text>
+<text x="84" y="392" font-family="Arial, Helvetica, sans-serif" font-size="94" font-weight="900" letter-spacing="-4" fill="#EAF0F4">Phishing URL</text>
+<text x="84" y="486" font-family="Arial, Helvetica, sans-serif" font-size="94" font-weight="900" letter-spacing="-4" fill="#FFB547">Checker</text>
+<text x="90" y="544" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="600" fill="#A9B6C2">Inspect the URL text. Explain the signals. Never visit the destination.</text>
+<text x="90" y="592" direction="rtl" font-family="Arial, Helvetica, sans-serif" font-size="27" font-weight="700" fill="#EAF0F4">تحليل محلي لبنية الرابط مع أسباب واضحة من دون فتح الموقع أو إرسال الرابط</text>
+
+<g transform="translate(90 640)">
+  <rect width="128" height="42" rx="21" fill="#87F5B5"/><text x="64" y="27" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="800" fill="#0B0F14">LOCAL</text>
+  <rect x="142" width="150" height="42" rx="21" fill="#4DD5FF"/><text x="217" y="27" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="800" fill="#0B0F14">EXPLAINABLE</text>
+  <rect x="306" width="136" height="42" rx="21" fill="#FFB547"/><text x="374" y="27" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="800" fill="#0B0F14">SCRIPTABLE</text>
+</g>
+
+<g transform="translate(930 115)">
+  <rect width="560" height="510" rx="30" fill="#101821" stroke="#263442" stroke-width="2"/>
+  <text x="34" y="48" font-family="Consolas,Menlo,monospace" font-size="16" font-weight="700" fill="#8091A0">THREAT LENS / URL FORENSICS</text>
+
+  <rect x="34" y="76" width="492" height="74" rx="16" fill="#0B0F14" stroke="#263442"/>
+  <text x="54" y="108" font-family="Consolas,Menlo,monospace" font-size="15" fill="#7D8994">http://</text>
+  <text x="108" y="108" font-family="Consolas,Menlo,monospace" font-size="15" font-weight="700" fill="#FF5D5D">user@</text>
+  <text x="154" y="108" font-family="Consolas,Menlo,monospace" font-size="15" font-weight="700" fill="#FFB547">192.0.2.1</text>
+  <text x="235" y="108" font-family="Consolas,Menlo,monospace" font-size="15" fill="#EAF0F4">/login/verify</text>
+  <text x="342" y="108" font-family="Consolas,Menlo,monospace" font-size="15" fill="#4DD5FF">?next=https://…</text>
+
+  <g font-family="Arial,sans-serif" font-size="13" font-weight="700">
+    <rect x="38" y="166" width="84" height="30" rx="8" fill="#1D2A33"/><text x="80" y="186" text-anchor="middle" fill="#A9B6C2">SCHEME</text>
+    <rect x="132" y="166" width="96" height="30" rx="8" fill="#40242A"/><text x="180" y="186" text-anchor="middle" fill="#FF8585">USER-INFO</text>
+    <rect x="238" y="166" width="76" height="30" rx="8" fill="#3B3020"/><text x="276" y="186" text-anchor="middle" fill="#FFD083">HOST</text>
+    <rect x="324" y="166" width="78" height="30" rx="8" fill="#1D2A33"/><text x="363" y="186" text-anchor="middle" fill="#A9B6C2">PATH</text>
+    <rect x="412" y="166" width="110" height="30" rx="8" fill="#173140"/><text x="467" y="186" text-anchor="middle" fill="#7CE3FF">QUERY</text>
+  </g>
+
+  <path d="M280 218v35" stroke="#526579" stroke-width="3"/>
+  <path d="M280 253L155 300M280 253L280 300M280 253L405 300" stroke="#526579" stroke-width="3"/>
+
+  <g font-family="Arial,sans-serif">
+    <rect x="62" y="292" width="180" height="62" rx="14" fill="#18242D" stroke="#FF5D5D" stroke-opacity=".5"/>
+    <text x="78" y="318" font-size="13" font-weight="800" fill="#FF7D7D">USERINFO</text>
+    <text x="78" y="338" font-size="12" fill="#A9B6C2">visual deception signal</text>
+
+    <rect x="250" y="292" width="116" height="62" rx="14" fill="#18242D" stroke="#FFB547" stroke-opacity=".5"/>
+    <text x="266" y="318" font-size="13" font-weight="800" fill="#FFD083">IP HOST</text>
+    <text x="266" y="338" font-size="12" fill="#A9B6C2">raw address</text>
+
+    <rect x="374" y="292" width="124" height="62" rx="14" fill="#18242D" stroke="#4DD5FF" stroke-opacity=".5"/>
+    <text x="390" y="318" font-size="13" font-weight="800" fill="#7CE3FF">REDIRECT</text>
+    <text x="390" y="338" font-size="12" fill="#A9B6C2">URL-like target</text>
+  </g>
+
+  <text x="34" y="407" font-family="Arial,sans-serif" font-size="13" font-weight="800" letter-spacing="2" fill="#8091A0">EXPLAINABLE RISK</text>
+  <rect x="34" y="424" width="492" height="22" rx="11" fill="#202C36"/>
+  <rect x="34" y="424" width="344" height="22" rx="11" fill="#FF5D5D"/>
+  <text x="34" y="480" font-family="Arial,sans-serif" font-size="36" font-weight="900" fill="#EAF0F4">HIGH</text>
+  <text x="132" y="480" font-family="Consolas,monospace" font-size="18" font-weight="700" fill="#FFB547">score = Σ rule points</text>
+  <text x="525" y="480" text-anchor="end" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#87F5B5">NO NETWORK REQUEST</text>
+</g>
+
+<text x="90" y="742" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" fill="#EAF0F4">رضوان عبدالهادي · Radwan Abd alhady Ahmed</text>
+<text x="1510" y="742" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="14" font-weight="700" letter-spacing="4" fill="#687785">A RADWAN ABD ALHADY PROJECT</text>
+</svg>

@@ -1,29 +1,125 @@
+<div align="center">
+
+<img src="assets/project-cover.svg" alt="Phishing URL Checker — offline explainable URL forensics" width="100%" />
+
+<br/>
+
+<img src="assets/project-logo.svg" alt="Phishing URL Checker logo" width="104" />
+
 # Phishing URL Checker
 
-Offline, explainable URL risk analysis for developers, students, support teams, and security-aware users. The tool inspects the **text structure** of HTTP(S) URLs and reports common phishing indicators without opening the site or sending the URL to a third party.
+**Offline, explainable URL risk analysis — inspect the URL text without visiting the destination.**
 
-> A heuristic score is not a verdict. A low score does not prove a site is safe, and a high score does not prove malicious intent.
+<div dir="rtl">
+<strong>تحليل محلي وقابل للتفسير لبنية روابط HTTP(S)، من دون فتح الموقع أو إرسال الرابط إلى خدمة خارجية.</strong>
+</div>
 
-## Why this project exists
+<br/>
 
-Many URL checkers require submitting a potentially private link to an online service. This project provides a small local first-pass inspection tool that is deterministic, scriptable, transparent, and suitable for CI or support workflows.
+[![CI](https://github.com/rad03i2/phishing-url-checker/actions/workflows/ci.yml/badge.svg)](https://github.com/rad03i2/phishing-url-checker/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3.10%2B-4DD5FF?logo=python&logoColor=0B0F14)
+![Offline](https://img.shields.io/badge/network-no%20requests-87F5B5)
+![Explainable](https://img.shields.io/badge/output-explainable-FFB547)
+![Score](https://img.shields.io/badge/risk-0..100-FF5D5D)
+![License](https://img.shields.io/badge/license-MIT-A9B6C2)
 
-## Features
+**[العربية](README_AR.md) · [English](README_EN.md) · [Rules & Architecture](docs/ARCHITECTURE.md) · [Security](SECURITY.md) · [Support](SUPPORT.md)**
 
-- Offline analysis: no DNS lookup, HTTP request, telemetry, API key, or cloud service.
-- Detects raw IP hosts, URL user-info deception, Punycode, deep subdomains, known shorteners, unusual ports, long URLs, heavily hyphenated hosts, selected high-abuse TLD signals, credential-oriented path/query language, and URL-like redirect parameters.
-- Weighted `0..100` score with `minimal`, `low`, `medium`, and `high` risk bands.
-- Every score contribution is returned as an explainable finding with code, severity, points, and message.
-- Batch analysis from command arguments or a UTF-8 text file.
-- Human-readable and JSON output plus CI-friendly `--fail-on` thresholds.
-- Public Python API with typed dataclasses.
-- Arabic/Unicode-safe input and JSON output.
-- Zero runtime dependencies.
+</div>
 
-## Preview
+---
+
+## Threat Lens: inspect structure, not content
+
+Phishing URL Checker analyzes the **lexical and structural shape** of an HTTP(S) URL. It never needs to resolve the hostname, fetch the page, follow a redirect, or submit the link to a reputation provider.
+
+> A heuristic score is evidence, not a verdict. A low score does not prove safety, and a high score does not prove malicious intent.
+
+<table>
+<tr>
+<td width="25%"><strong>Private by design</strong><br/><sub>Submitted URLs stay local during analysis.</sub></td>
+<td width="25%"><strong>Explainable</strong><br/><sub>Every contribution has a code, severity, point value and message.</sub></td>
+<td width="25%"><strong>Deterministic</strong><br/><sub>The same URL and rule set produce the same structural result.</sub></td>
+<td width="25%"><strong>Automation-ready</strong><br/><sub>JSON output and risk thresholds work well in scripts and CI.</sub></td>
+</tr>
+</table>
+
+## What it can flag
+
+The current rules inspect signals such as:
+
+| Signal | Example interpretation |
+|---|---|
+| Plain HTTP | Connection is not protected by HTTPS |
+| URL user-info | Text before the hostname may visually mislead a user |
+| Raw IP host | Host is an IP address rather than a domain name |
+| Punycode | Internationalized hostname needs careful human verification |
+| Deep subdomains | Host contains an unusually long label chain |
+| Known shorteners | Final destination is hidden by the shortened URL |
+| Watch-list TLD | A selected TLD receives a low-weight caution signal |
+| Unusual port | Web URL uses a port other than 80 or 443 |
+| Long URL | Length can make destination details harder to inspect |
+| Many hyphens | Host contains several hyphens |
+| Credential language | Path/query includes multiple account/login-related terms |
+| Redirect parameter | Query contains a URL-like redirect destination |
+| Encoded authority delimiters | Encoded delimiter characters appear in the authority |
+
+The implementation and point values are visible in `src/phishing_url_checker/checker.py`.
+
+## Quick start
+
+```bash
+git clone https://github.com/rad03i2/phishing-url-checker.git
+cd phishing-url-checker
+python -m pip install -e .
+```
+
+Analyze a normal URL:
+
+```bash
+phishcheck https://example.com
+```
+
+Analyze a structurally suspicious example using documentation-safe addresses:
+
+```bash
+phishcheck "http://user@192.0.2.1/login/verify"
+```
+
+Batch mode:
+
+```bash
+phishcheck --file examples/urls.txt
+```
+
+JSON:
+
+```bash
+phishcheck https://example.com --json
+```
+
+CI-style threshold:
+
+```bash
+phishcheck suspicious-url-here --fail-on high
+```
+
+## Risk model
+
+The checker adds rule points, caps the total at 100, then maps the score to the current bands:
 
 ```text
-$ phishcheck "http://user@192.0.2.1/login/verify"
+0          → minimal
+1..24      → low
+25..49     → medium
+50..100    → high
+```
+
+Each finding remains visible, so automation should prefer stable finding `code` values rather than parsing the human-readable prose.
+
+## Example output
+
+```text
 URL: http://user@192.0.2.1/login/verify
 Host: 192.0.2.1
 Risk: HIGH (.../100)
@@ -31,205 +127,117 @@ Findings:
   - [MEDIUM] Connection is not protected by HTTPS. (plain-http, +15)
   - [HIGH] URL contains user-info before the hostname... (userinfo, +30)
   - [HIGH] Hostname is a raw IP address... (ip-host, +25)
+Note: heuristic result only; it does not prove that a site is safe or malicious.
 ```
 
-The exact score is calculated from the current rule set; use finding codes rather than parsing prose in automation.
+The exact score is produced by the current rule set.
 
-## Requirements and installation
-
-Python 3.10 or newer.
-
-```bash
-git clone https://github.com/rad03i2/phishing-url-checker.git
-cd phishing-url-checker
-python -m pip install -e .
-```
-
-For development/testing:
-
-```bash
-python -m pip install -e . pytest
-```
-
-## Usage
-
-```bash
-phishcheck https://example.com
-phishcheck "http://user@192.0.2.1/login/verify"
-phishcheck --file examples/urls.txt
-phishcheck https://example.com --json
-phishcheck suspicious-url-here --fail-on high
-python -m phishing_url_checker https://example.com
-```
-
-`--fail-on medium` or `--fail-on high` returns exit code `2` when any analyzed URL reaches that threshold. Invalid input/file errors return `1`; normal completion returns `0`.
-
-### Python API
+## Python API
 
 ```python
 from phishing_url_checker import analyze_url
 
 report = analyze_url("https://example.com/account/verify")
 print(report.risk, report.score)
+
 for finding in report.findings:
-    print(finding.code, finding.message)
+    print(finding.code, finding.severity, finding.points)
 ```
 
-## Configuration
+The public API exposes typed dataclasses for reports and findings.
 
-No environment variables, accounts, secrets, or configuration files are required. Detection rules are intentionally visible in `src/phishing_url_checker/checker.py` so users can audit how a score is produced.
+## Exit codes
 
-## Project structure
+| Code | Meaning |
+|---:|---|
+| `0` | Normal completion |
+| `1` | Invalid input or file error |
+| `2` | A report met the selected `--fail-on` threshold |
 
-```text
-src/phishing_url_checker/
-  checker.py       # validation, rules, score, report models
-  cli.py           # CLI, batch/JSON output, exit codes
-  __init__.py      # public API
-  __main__.py      # python -m support
-tests/test_checker.py
-examples/urls.txt
-.github/workflows/ci.yml
-```
+## Privacy boundary
 
-## Testing
+During analysis the checker does **not** intentionally:
+
+- perform DNS lookup;
+- send HTTP/HTTPS requests;
+- follow redirects;
+- query certificate services;
+- expand short URLs;
+- contact reputation or threat-intelligence APIs;
+- send telemetry.
+
+That boundary is a core property of the project.
+
+## Tests and CI
 
 ```bash
+python -m pip install -e . pytest
 python -m compileall -q src tests
 python -m pytest -q
 ```
 
-GitHub Actions runs compilation, tests, and a CLI smoke test on Ubuntu, Windows, and macOS with Python 3.10, 3.12, and 3.13.
+GitHub Actions runs compilation, tests, and a CLI smoke test across Ubuntu, Windows and macOS on Python 3.10, 3.12 and 3.13.
 
-## Security and privacy
+## What this project is not
 
-Submitted URLs stay local. The checker never visits a URL, resolves its hostname, downloads content, or queries a reputation service. This prevents the checker itself from contacting an untrusted destination and avoids disclosing private links to a remote provider. See `SECURITY.md`.
+It is not:
 
-## Limitations
+- a browser sandbox;
+- an antivirus engine;
+- a live reputation database;
+- a certificate validator;
+- a page-content scanner;
+- a shortened-link expander;
+- a guarantee that a URL is safe or malicious.
 
-This is a **lexical/structural heuristic checker**, not a browser sandbox, antivirus engine, reputation database, certificate validator, page-content scanner, or guarantee of safety. New or carefully crafted phishing URLs can look structurally normal. Legitimate URLs can trigger warnings. Shortened links cannot be expanded offline. Internationalized domains require human context even when Punycode is highlighted. For important decisions, combine this result with browser protections, organizational security controls, domain/reputation intelligence, and human verification.
+A well-crafted phishing URL can look structurally ordinary, and a legitimate URL can trigger heuristics. Important decisions should combine structural analysis with browser protections, organizational controls, domain/reputation intelligence and human verification.
 
-## Optional roadmap
+## Repository map
 
-Future work may add user-supplied allow/block lists and pluggable, explicitly opt-in reputation providers while preserving the default offline mode.
+```text
+phishing-url-checker/
+├── assets/                       visual identity
+├── docs/
+│   ├── ARCHITECTURE.md           rule and data-flow documentation
+│   └── BRAND.md                  Threat Lens identity
+├── examples/urls.txt             documentation-safe examples
+├── src/phishing_url_checker/
+│   ├── checker.py                validation + heuristic rules + scoring
+│   ├── cli.py                    CLI + JSON + thresholds
+│   ├── __init__.py               public Python API
+│   └── __main__.py               python -m entry point
+├── tests/test_checker.py
+├── README_AR.md
+├── README_EN.md
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── SECURITY.md
+├── SUPPORT.md
+└── LICENSE
+```
 
-## Contributing
+## Project documents
 
-See `CONTRIBUTING.md`. Please include tests for new rules and explain false-positive tradeoffs.
-
-## License
-
-MIT — see `LICENSE`.
-
-## Author
-
-**Radwan Abdulhadi Ahmed**  
-**رضوان عبدالهادي أحمد**  
-GitHub: **@rad03i2**
+| Resource | Purpose |
+|---|---|
+| [README_AR.md](README_AR.md) | الدليل العربي |
+| [README_EN.md](README_EN.md) | Full English guide |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Validation, rule flow and scoring model |
+| [docs/BRAND.md](docs/BRAND.md) | Threat Lens visual system |
+| [SECURITY.md](SECURITY.md) | Safe use and privacy boundary |
+| [SUPPORT.md](SUPPORT.md) | Troubleshooting |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Rule-design and contribution guidance |
+| [CHANGELOG.md](CHANGELOG.md) | Notable repository changes |
+| [LICENSE](LICENSE) | MIT License |
 
 ---
 
-# العربية | مدقق روابط التصيد
+<div align="center">
 
-أداة محلية وقابلة للتفسير لتحليل مؤشرات الخطورة في روابط HTTP وHTTPS. تفحص **بنية نص الرابط فقط** وتعرض إشارات شائعة مرتبطة بروابط التصيد، من دون فتح الموقع أو إرسال الرابط إلى أي خدمة خارجية.
+### Built by رضوان عبدالهادي
 
-> النتيجة تقدير إرشادي وليست حكمًا نهائيًا. النتيجة المنخفضة لا تثبت أن الموقع آمن، والنتيجة المرتفعة لا تثبت وحدها أنه خبيث.
+**Radwan Abd alhady Ahmed · [@rad03i2](https://github.com/rad03i2)**
 
-## لماذا هذا المشروع؟
+<sub>Inspect the structure. Explain the evidence. Keep the URL local.</sub>
 
-تتطلب أدوات كثيرة إرسال الرابط إلى خدمة عبر الإنترنت، وقد يكون الرابط خاصًا. يوفر هذا المشروع فحصًا أوليًا صغيرًا يعمل محليًا، ونتيجته حتمية وقابلة للأتمتة، كما أن قواعده واضحة ويمكن مراجعتها.
-
-## الميزات
-
-- يعمل دون DNS أو طلبات HTTP أو تتبع أو مفاتيح API أو خدمات سحابية.
-- يكشف استخدام عنوان IP بدل النطاق، وبيانات المستخدم داخل الرابط، وPunycode، وكثرة النطاقات الفرعية، ومختصرات الروابط المعروفة، والمنافذ غير المعتادة، والروابط الطويلة، وكثرة الشرطات، وبعض إشارات TLD، وكلمات الحساب/تسجيل الدخول في المسار أو الاستعلام، ومعاملات إعادة التوجيه التي تحتوي روابط.
-- درجة موزونة من 0 إلى 100 مع مستويات: أدنى، منخفض، متوسط، مرتفع.
-- كل سبب يظهر بكود ومستوى ونقاط ورسالة تفسيرية.
-- فحص عدة روابط من سطر الأوامر أو ملف UTF-8.
-- مخرجات نصية أو JSON وخيار `--fail-on` المناسب لـCI.
-- Python API باستخدام dataclasses.
-- يدعم العربية وUnicode في الإدخال وJSON.
-- بلا اعتماديات تشغيل خارجية.
-
-## التثبيت
-
-يتطلب Python 3.10 أو أحدث:
-
-```bash
-git clone https://github.com/rad03i2/phishing-url-checker.git
-cd phishing-url-checker
-python -m pip install -e .
-```
-
-للتطوير والاختبار:
-
-```bash
-python -m pip install -e . pytest
-```
-
-## الاستخدام
-
-```bash
-phishcheck https://example.com
-phishcheck "http://user@192.0.2.1/login/verify"
-phishcheck --file examples/urls.txt
-phishcheck https://example.com --json
-python -m phishing_url_checker https://example.com
-```
-
-يعيد `--fail-on medium` أو `--fail-on high` رمز الخروج `2` عند بلوغ الحد، بينما أخطاء الإدخال تعيد `1` والنجاح الطبيعي يعيد `0`.
-
-### Python API
-
-```python
-from phishing_url_checker import analyze_url
-
-report = analyze_url("https://example.com/account/verify")
-print(report.risk, report.score)
-```
-
-## الإعداد
-
-لا يحتاج المشروع متغيرات بيئة أو حسابات أو أسرارًا. توجد قواعد الكشف بصورة واضحة في `src/phishing_url_checker/checker.py` ويمكن مراجعة طريقة حساب النتيجة مباشرة.
-
-## بنية المشروع
-
-- `src/phishing_url_checker/`: محرك التحليل وCLI وواجهة Python.
-- `tests/`: اختبارات الوظائف وسطر الأوامر.
-- `examples/urls.txt`: روابط آمنة مخصصة للتجربة والتوثيق.
-- `.github/workflows/ci.yml`: فحص متعدد الأنظمة وإصدارات Python.
-
-## الاختبارات
-
-```bash
-python -m compileall -q src tests
-python -m pytest -q
-```
-
-يشغل GitHub Actions الاختبارات على Ubuntu وWindows وmacOS مع Python 3.10 و3.12 و3.13.
-
-## الأمان والخصوصية
-
-لا يزور البرنامج الروابط ولا يحل أسماء النطاقات ولا ينزل محتوى ولا يستعلم من قواعد سمعة خارجية. لذلك يبقى الرابط محليًا ولا يتسبب الفحص نفسه في اتصال بوجهة غير موثوقة. راجع `SECURITY.md`.
-
-## القيود
-
-هذه أداة تحليل بنيوي/لفظي وليست sandbox للمتصفح أو مضاد فيروسات أو قاعدة سمعة أو مدقق شهادات أو ماسح محتوى صفحات. قد يبدو رابط تصيد متقن طبيعيًا، وقد تُظهر روابط سليمة تحذيرات. ولا يمكن كشف الوجهة النهائية للرابط المختصر دون اتصال بالشبكة. عند القرارات المهمة استخدم وسائل حماية إضافية وتحققًا بشريًا.
-
-## التطوير المستقبلي الاختياري
-
-يمكن مستقبلًا إضافة قوائم سماح/حظر يقدمها المستخدم ومزودي سمعة اختياريين مع الحفاظ على الوضع المحلي كخيار افتراضي.
-
-## المساهمة
-
-راجع `CONTRIBUTING.md`. يجب إضافة اختبارات للقواعد الجديدة وشرح احتمالات النتائج الإيجابية الكاذبة.
-
-## الترخيص
-
-MIT — راجع `LICENSE`.
-
-## المؤلف
-
-**Radwan Abdulhadi Ahmed**  
-**رضوان عبدالهادي أحمد**  
-GitHub: **@rad03i2**
+</div>

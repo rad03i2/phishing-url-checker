@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security policy
+    url: https://github.com/rad03i2/phishing-url-checker/blob/main/SECURITY.md
+    about: Read before reporting sensitive security problems.
+  - name: Support guide
+    url: https://github.com/rad03i2/phishing-url-checker/blob/main/SUPPORT.md
+    about: Understand heuristic results, validation and safe bug reporting.
